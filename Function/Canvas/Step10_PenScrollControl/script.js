@@ -3,11 +3,7 @@
 // ======================================================
 
 const canvases = document.querySelectorAll(".pageCanvas");
-
-// ======================================================
-// Debug表示
-// ======================================================
-
+const canvasContainer = document.getElementById("canvasContainer");
 const debug = document.getElementById("debug");
 
 // ======================================================
@@ -15,73 +11,89 @@ const debug = document.getElementById("debug");
 // ======================================================
 
 canvases.forEach((canvas) => {
-  const ctx = canvas.getContext("2d");
 
-  // Canvasサイズ
-  canvas.width = 1000;
-  canvas.height = 1400;
+    const ctx = canvas.getContext("2d");
 
-  let isDrawing = false;
+    // Canvasサイズ
+    canvas.width = 1000;
+    canvas.height = 1400;
 
-  // ======================================================
-  // 座標取得
-  // ======================================================
+    let isDrawing = false;
 
-  function getCanvasPosition(e) {
-    const rect = canvas.getBoundingClientRect();
+    // ======================================================
+    // 座標取得
+    // ======================================================
 
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-  }
+    function getCanvasPosition(e) {
 
-  // ======================================================
-  // 描画開始
-  // ======================================================
+        const rect = canvas.getBoundingClientRect();
 
-  canvas.addEventListener("pointerdown", (e) => {
-    debug.textContent = "pointerType : " + e.pointerType;
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
 
-    if (e.pointerType === "pen") {
-      document.getElementById("canvasContainer").style.overflow = "hidden";
     }
 
-    isDrawing = true;
+    // ======================================================
+    // 描画開始
+    // ======================================================
 
-    ctx.beginPath();
+    canvas.addEventListener("pointerdown", (e) => {
 
-    const pos = getCanvasPosition(e);
+        debug.textContent = "pointerType : " + e.pointerType;
 
-    ctx.moveTo(pos.x, pos.y);
-  });
+        // Apple Pencil以外は描画しない
+        if (e.pointerType !== "pen") {
+            return;
+        }
 
-  // ======================================================
-  // 描画中
-  // ======================================================
+        // 描画中だけスクロールを停止
+        canvasContainer.style.overflow = "hidden";
 
-  canvas.addEventListener("pointermove", (e) => {
-    if (!isDrawing) return;
+        isDrawing = true;
 
-    const pos = getCanvasPosition(e);
+        ctx.beginPath();
 
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-  });
+        const pos = getCanvasPosition(e);
 
-  // ======================================================
-  // 描画終了
-  // ======================================================
+        ctx.moveTo(pos.x, pos.y);
 
-  canvas.addEventListener("pointerup", (e) => {
-    if (e.pointerType === "pen") {
-      document.getElementById("canvasContainer").style.overflow = "auto";
-    }
+    });
 
-    isDrawing = false;
-  });
+    // ======================================================
+    // 描画中
+    // ======================================================
 
-  canvas.addEventListener("pointerleave", () => {
-    isDrawing = false;
-  });
+    canvas.addEventListener("pointermove", (e) => {
+
+        if (!isDrawing) return;
+
+        const pos = getCanvasPosition(e);
+
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+
+    });
+
+    // ======================================================
+    // 描画終了
+    // ======================================================
+
+    canvas.addEventListener("pointerup", () => {
+
+        canvasContainer.style.overflow = "auto";
+
+        isDrawing = false;
+
+    });
+
+    canvas.addEventListener("pointerleave", () => {
+
+        canvasContainer.style.overflow = "auto";
+
+        isDrawing = false;
+
+    });
+
 });
