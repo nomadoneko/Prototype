@@ -44,6 +44,24 @@ body {
     border: 1px solid #cccccc;
 
     background: white;
+
+    -webkit-user-drag: none;
+}
+
+/* ======================================================
+   選択禁止
+====================================================== */
+
+html,
+body,
+#canvasContainer,
+.pageCanvas {
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-touch-callout: none;
+
 }
 
 /* ======================================================
