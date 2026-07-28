@@ -5,6 +5,12 @@
 const canvases = document.querySelectorAll(".pageCanvas");
 
 // ======================================================
+// Debug表示
+// ======================================================
+
+const debug = document.getElementById("debug");
+
+// ======================================================
 // 各Canvasへ描画機能を登録
 // ======================================================
 
@@ -39,7 +45,8 @@ canvases.forEach((canvas) => {
 
     canvas.addEventListener("pointerdown", (e) => {
 
-        console.log(e.pointerType);
+         debug.textContent = "pointerType : " + e.pointerType;
+
 
         isDrawing = true;
 
