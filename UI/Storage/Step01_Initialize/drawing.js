@@ -8,7 +8,7 @@
 // Notebookへ統合するときは false にする
 // ======================================================
 
-const DEBUG_MOUSE_DRAWING = true;
+const DEBUG_MOUSE_DRAWING = false;
 
 
 // ======================================================
