@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Step02_UndoRedo</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="canvasContainer">
+      <canvas class="pageCanvas"></canvas>
+
+      <canvas class="pageCanvas"></canvas>
+
+      <canvas class="pageCanvas"></canvas>
+    </div>
+
+    <!-- ==================================================
+         UI
+    ================================================== -->
+
+    <div id="toolbar">
+      <button id="undoButton" type="button">↶</button>
+
+      <button id="redoButton" type="button">↷</button>
+
+      <button id="initializeButton" type="button">初期化</button>
+    </div>
+
+    <!-- ==================================================
+         Debug
+    ================================================== -->
+
+    <div id="debug">pointerType :</div>
+
+    <script src="canvas.js"></script>
+    <script src="drawing.js"></script>
+    <script src="ui.js"></script>
+    <script src="storage.js"></script>
+  </body>
+</html>
