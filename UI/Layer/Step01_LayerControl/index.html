@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Step01_LayerButton</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+
+    <!-- ==================================================
+         Canvas
+    ================================================== -->
+
+    <div id="canvasContainer">
+
+      <canvas class="pageCanvas" data-layer="1"></canvas>
+
+      <canvas class="pageCanvas" data-layer="2"></canvas>
+
+      <canvas class="pageCanvas" data-layer="3"></canvas>
+
+    </div>
+
+
+    <!-- ==================================================
+         Layer表示
+    ================================================== -->
+
+    <div id="layerDisplay">
+
+      <div>
+        現在のLayer : Layer 1 / 表示
+      </div>
+
+      <!-- ==================================================
+           Layer一覧
+      ================================================== -->
+
+      <div id="layerList">
+
+        <div>
+          Layer 1 : 表示
+        </div>
+
+        <div>
+          Layer 2 : 表示
+        </div>
+
+        <div>
+          Layer 3 : 表示
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Debug表示
+    ================================================== -->
+
+    <div id="debug">
+      pointerType :
+    </div>
+
+
+    <!-- ==================================================
+         UI
+    ================================================== -->
+
+    <div id="toolbar">
+
+      <!-- ==================================================
+           Undo / Redo
+      ================================================== -->
+
+      <button
+        id="undoButton"
+        type="button"
+      >
+        ↶
+      </button>
+
+      <button
+        id="redoButton"
+        type="button"
+      >
+        ↷
+      </button>
+
+
+      <!-- ==================================================
+           初期化
+      ================================================== -->
+
+      <button
+        id="initializeButton"
+        type="button"
+      >
+        初期化
+      </button>
+
+
+      <!-- ==================================================
+           Layer選択
+      ================================================== -->
+
+      <button
+        id="layer1Button"
+        type="button"
+      >
+        Layer 1
+      </button>
+
+      <button
+        id="layer2Button"
+        type="button"
+      >
+        Layer 2
+      </button>
+
+      <button
+        id="layer3Button"
+        type="button"
+      >
+        Layer 3
+      </button>
+
+
+      <!-- ==================================================
+           Layer表示操作
+      ================================================== -->
+
+      <button
+        id="layerVisibilityButton"
+        type="button"
+      >
+        V
+      </button>
+
+      <button
+        id="allLayerVisibilityButton"
+        type="button"
+      >
+        A
+      </button>
+
+    </div>
+
+
+    <!-- ==================================================
+         JavaScript
+    ================================================== -->
+
+    <script
+      type="module"
+      src="scripts.js"
+    ></script>
+
+  </body>
+</html>
