@@ -26,7 +26,54 @@ import {
 
 async function startScreenCapture() {
 
+  // ==================================================
+  // Debug
+  // ==================================================
+
+  const debug =
+    document.getElementById("debug");
+
+
+  function showDebug(message) {
+
+    if (debug) {
+
+      debug.textContent =
+        "Screen Capture : " +
+        message;
+
+    }
+
+  }
+
+
+  showDebug("開始");
+
+
   try {
+
+    // ==================================================
+    // getDisplayMedia確認
+    // ==================================================
+
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getDisplayMedia
+    ) {
+
+      showDebug(
+        "getDisplayMediaが使用できません"
+      );
+
+      return;
+
+    }
+
+
+    showDebug(
+      "共有画面を選択してください"
+    );
+
 
     // ==================================================
     // 画面キャプチャを開始
@@ -36,6 +83,11 @@ async function startScreenCapture() {
       await navigator.mediaDevices.getDisplayMedia({
         video: true
       });
+
+
+    showDebug(
+      "画面共有開始"
+    );
 
 
     // ==================================================
@@ -95,6 +147,11 @@ async function startScreenCapture() {
       "loadedmetadata",
       () => {
 
+        showDebug(
+          "Video準備完了"
+        );
+
+
         // ==================================================
         // キャプチャ画面サイズ
         // ==================================================
@@ -104,6 +161,14 @@ async function startScreenCapture() {
 
         const height =
           video.videoHeight;
+
+
+        showDebug(
+          "画面サイズ : " +
+          width +
+          " × " +
+          height
+        );
 
 
         // ==================================================
@@ -150,8 +215,22 @@ async function startScreenCapture() {
         // 現在Layerへ貼り付け
         // ==================================================
 
+        showDebug(
+          "現在Layerへ貼り付け"
+        );
+
+
         addImageToCurrentLayer(
           captureCanvas
+        );
+
+
+        // ==================================================
+        // 完了
+        // ==================================================
+
+        showDebug(
+          "キャプチャ完了"
         );
 
       }
@@ -168,16 +247,27 @@ async function startScreenCapture() {
         "ended",
         () => {
 
+          showDebug(
+            "画面共有終了"
+          );
+
           video.remove();
 
         }
       );
 
+
   } catch (error) {
 
-    console.error(
-      "画面キャプチャに失敗しました:",
-      error
+    // ==================================================
+    // エラー
+    // ==================================================
+
+    showDebug(
+      "エラー : " +
+      error.name +
+      " / " +
+      error.message
     );
 
   }
