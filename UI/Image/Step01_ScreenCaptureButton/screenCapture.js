@@ -10,275 +10,178 @@
 //
 // ======================================================
 
-
 // ======================================================
 // Image
 // ======================================================
 
-import {
-  addImageToCurrentLayer
-} from "./image.js";
-
+import { addImageToCurrentLayer } from "./image.js";
 
 // ======================================================
 // 画面キャプチャ開始
 // ======================================================
 
 async function startScreenCapture() {
-
   // ==================================================
   // Debug
   // ==================================================
 
-  const debug =
-    document.getElementById("debug");
-
+  const debug = document.getElementById("debug");
 
   function showDebug(message) {
-
     if (debug) {
-
-      debug.textContent =
-        "Screen Capture : " +
-        message;
-
+      debug.textContent = "Screen Capture : " + message;
     }
-
   }
-
 
   showDebug("開始");
 
-
   try {
-
     // ==================================================
     // getDisplayMedia確認
     // ==================================================
 
-    if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getDisplayMedia
-    ) {
-
-      showDebug(
-        "getDisplayMediaが使用できません"
-      );
+    if (!navigator.mediaDevices) {
+      showDebug("mediaDevicesがありません");
 
       return;
-
     }
 
+    if (!navigator.mediaDevices.getDisplayMedia) {
+      showDebug("getDisplayMediaがありません");
 
-    showDebug(
-      "共有画面を選択してください"
-    );
+      return;
+    }
 
+    showDebug("共有画面を選択してください");
 
     // ==================================================
     // 画面キャプチャを開始
     // ==================================================
 
-    const stream =
-      await navigator.mediaDevices.getDisplayMedia({
-        video: true
-      });
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+    });
 
-
-    showDebug(
-      "画面共有開始"
-    );
-
+    showDebug("画面共有開始");
 
     // ==================================================
     // Video要素
     // ==================================================
 
-    const video =
-      document.createElement("video");
+    const video = document.createElement("video");
 
-    video.srcObject =
-      stream;
+    video.srcObject = stream;
 
-    video.autoplay =
-      true;
-
+    video.autoplay = true;
 
     // ==================================================
     // Videoを非表示
     // ==================================================
 
-    video.style.position =
-      "fixed";
+    video.style.position = "fixed";
 
-    video.style.width =
-      "1px";
+    video.style.width = "1px";
 
-    video.style.height =
-      "1px";
+    video.style.height = "1px";
 
-    video.style.opacity =
-      "0";
+    video.style.opacity = "0";
 
-    video.style.pointerEvents =
-      "none";
+    video.style.pointerEvents = "none";
 
-    document.body.appendChild(
-      video
-    );
-
+    document.body.appendChild(video);
 
     // ==================================================
     // キャプチャCanvas
     // ==================================================
 
-    const captureCanvas =
-      document.createElement("canvas");
+    const captureCanvas = document.createElement("canvas");
 
-    const captureContext =
-      captureCanvas.getContext("2d");
-
+    const captureContext = captureCanvas.getContext("2d");
 
     // ==================================================
     // Video準備完了
     // ==================================================
 
-    video.addEventListener(
-      "loadedmetadata",
-      () => {
+    video.addEventListener("loadedmetadata", () => {
+      showDebug("Video準備完了");
 
-        showDebug(
-          "Video準備完了"
-        );
+      // ==================================================
+      // キャプチャ画面サイズ
+      // ==================================================
 
+      const width = video.videoWidth;
 
-        // ==================================================
-        // キャプチャ画面サイズ
-        // ==================================================
+      const height = video.videoHeight;
 
-        const width =
-          video.videoWidth;
+      showDebug("画面サイズ : " + width + " × " + height);
 
-        const height =
-          video.videoHeight;
+      // ==================================================
+      // 右半分
+      // ==================================================
 
+      const halfWidth = Math.floor(width / 2);
 
-        showDebug(
-          "画面サイズ : " +
-          width +
-          " × " +
-          height
-        );
+      // ==================================================
+      // キャプチャCanvasサイズ
+      // ==================================================
 
+      captureCanvas.width = halfWidth;
 
-        // ==================================================
-        // 右半分
-        // ==================================================
+      captureCanvas.height = height;
 
-        const halfWidth =
-          Math.floor(width / 2);
+      // ==================================================
+      // 右半分を取得
+      // ==================================================
 
+      captureContext.drawImage(
+        video,
 
-        // ==================================================
-        // キャプチャCanvasサイズ
-        // ==================================================
+        halfWidth,
+        0,
+        halfWidth,
+        height,
 
-        captureCanvas.width =
-          halfWidth;
+        0,
+        0,
+        halfWidth,
+        height,
+      );
 
-        captureCanvas.height =
-          height;
+      // ==================================================
+      // 現在Layerへ貼り付け
+      // ==================================================
 
+      showDebug("現在Layerへ貼り付け");
 
-        // ==================================================
-        // 右半分を取得
-        // ==================================================
+      addImageToCurrentLayer(captureCanvas);
 
-        captureContext.drawImage(
+      // ==================================================
+      // 完了
+      // ==================================================
 
-          video,
-
-          halfWidth,
-          0,
-          halfWidth,
-          height,
-
-          0,
-          0,
-          halfWidth,
-          height
-
-        );
-
-
-        // ==================================================
-        // 現在Layerへ貼り付け
-        // ==================================================
-
-        showDebug(
-          "現在Layerへ貼り付け"
-        );
-
-
-        addImageToCurrentLayer(
-          captureCanvas
-        );
-
-
-        // ==================================================
-        // 完了
-        // ==================================================
-
-        showDebug(
-          "キャプチャ完了"
-        );
-
-      }
-    );
-
+      showDebug("キャプチャ完了");
+    });
 
     // ==================================================
     // キャプチャ終了
     // ==================================================
 
-    stream
-      .getVideoTracks()[0]
-      .addEventListener(
-        "ended",
-        () => {
+    stream.getVideoTracks()[0].addEventListener("ended", () => {
+      showDebug("画面共有終了");
 
-          showDebug(
-            "画面共有終了"
-          );
-
-          video.remove();
-
-        }
-      );
-
-
+      video.remove();
+    });
   } catch (error) {
-
     // ==================================================
     // エラー
     // ==================================================
 
-    showDebug(
-      "エラー : " +
-      error.name +
-      " / " +
-      error.message
-    );
-
+    showDebug("エラー : " + error.name + " / " + error.message);
   }
-
 }
-
 
 // ======================================================
 // 外部へ公開
 // ======================================================
 
-export {
-  startScreenCapture
-};
+export { startScreenCapture };
